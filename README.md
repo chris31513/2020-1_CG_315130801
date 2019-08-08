@@ -10,4 +10,4 @@ García Gómez Christian Rodrigo
 chris3151@ciencias.unam.mx
 
 ## Descripción ##
-La descripción del repositorio
+Repositorio dedicado a la clase de Graficación por Computadora.
