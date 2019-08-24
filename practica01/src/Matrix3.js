@@ -83,7 +83,71 @@ var CG = (function(CG){
 		}
 
 		determinant(){
-			
+			a = this.a00 * this.a11 * this.a22;
+			b = this.a01 * this.a12 * this.a20;
+			c = this.a02 * this.a10 * this.a21;
+			d = this.a02 * this.a11 * this.a20;
+			e = this.a12 * this.a21 * this.a00;
+			f = this.a22 * this.a01 * this.a10;
+			d = d + e + f;
+			d = d * -1;
+			a = a + b + c + d;
+			return a; 
+		}
+
+		static exactEquals(m1, m2){
+			return m1.a00 == m2.a00 && m1.a01 == m2.a01 && m1.a02 == m2.a02 && 
+				   m1.a10 == m2.a10 && m1.a11 == m2.a11 && m1.a12 == m2.a12 &&
+				   m1.a20 == m2.a20 && m1.a21 == m2.a21 && m1.a22 == m2.a22;
+		}
+
+		identity(){
+			this.a00 = 1;
+			this.a01 = 0;
+			this.a02 = 0;
+			this.a10 = 0;
+			this.a11 = 1;
+			this.a12 = 0;
+			this.a20 = 0;
+			this.a21 = 0;
+			this.a22 = 0;
+		}
+
+		static multiply(m1, m2){
+			m3 = Matrix3((m1.a00 * m2.a00) + (m1.a01 * m2.a10) + (m1.a02 * m2.a20), (m1.a00 * m2.a01) + (m1.a01 * m2.a11) + (m1.a02 * m2.a21), (m1.a00 * m2.a02) + (m1.a01 * m2.a12) + (m1.a02 * m2.a22),
+				         (m1.a10 * m2.a00) + (m1.a11 * m2.a10) + (m1.a12 * m2.a20), (m1.a10 * m2.a01) + (m1.a11 * m2.a11) + (m1.a12 * m2.a21), (m1.a10 * m2.a02) + (m1.a11 * m2.a12) + (m1.a12 * m2.a22),
+				         (m1.a20 * m2.a00) + (m1.a21 * m2.a10) + (m1.a22 * m2.a20), (m1.a20 * m2.a01) + (m1.a21 * m2.a11) + (m1.a22 * m2.a21), (m1.a20 * m2.a02) + (m1.a21 * m2.a12) + (m1.a22 * m2.a22));
+			return m3;
+		}
+
+		static multiplyScalar(m1, c){
+			m3 = Matrix3(m1.a00 * c, m1.a01 * c, m1.a02 * c,
+				         m1.a10 * c, m1.a11 * c, m1.a12 * c,
+				         m1.a20 * c, m1.a21 * c, m1.a22 * c);
+			return m3;
+		}
+
+		set(a00, a01, a02, a10, a11, a12, a20, a21, a20){
+			this.a00 = a00;
+			this.a01 = a01;
+			this.a02 = a02;
+			this.a10 = a10;
+			this.a11 = a11;
+			this.a12 = a12;
+			this.a21 = a21;
+			this.a22 = a22;
+		}
+
+		static substract(m1, m2){
+			m2 = this.multiplyScalar(m2, -1);
+			return this.add(m1,m2);
+		}
+
+		transpose(){
+			m = Matrix3(this.a00, this.a10, this.a20,
+				        this.a01, this.a11, this.a21,
+				        this.a02, this.a12, this.a22);
+			return m;
 		}
 	}
 
