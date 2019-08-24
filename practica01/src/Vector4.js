@@ -49,8 +49,7 @@ var CG = (function(CG){
 
 		static equals(u, v){
 			epsilon = 0.000001;
-			vector_e = Vector4(epsilon, epsilon, epsilon);
-			return exactEquals(add(u, vector_e), add(v, vector_e)) || exactEquals(u, v);
+			return (((u.x >= v.x) || (u.x <= (v.x + epsilon))) && ((u.y >= v.y) || (u.y <= v.x + epsilon)) && ((u.z >= v.z) || (u.z <= v.z + epsilon)) && ((u.w >= v.w) || (u.w <= v.w + epsilon))) || (((v.x >= u.x) || (v.x <= u.x + epsilon)) && ((v.y >= u.y) || (v.y <= u.y + epsilon)) && ((v.z >= u.z) || (v.z <= u.z + epsilon)) && ((v.w >= u.w) || (v.w <=  u.w + epsilon)));
 		}
 
 		static exactEquals(u, v){
