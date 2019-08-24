@@ -47,6 +47,12 @@ var CG = (function(CG){
 			return (u.x * v.x) + (u.y * v.y) + (u.z * v.z) + (u.w * v.w);
 		}
 
+		static equals(u, v){
+			epsilon = 0.000001;
+			vector_e = Vector4(epsilon, epsilon, epsilon);
+			return exactEquals(add(u, vector_e), add(v, vector_e)) || exactEquals(u, v);
+		}
+
 		static exactEquals(u, v){
 			if(u.x == v.x && u.y == v.y && u.z == v.z && u.w == v.w){
 				return true;
