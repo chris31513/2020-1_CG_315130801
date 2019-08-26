@@ -88,14 +88,16 @@ var CG = (function(CG) {
         }
 
         /**
-         * Makes this a unitary vector preserving the direction
+         * Returns a unitary vector preserving the direction
          */
         normalize() {
             var len = this.length();
-            this.x /= len;
-            this.y /= len;
-            this.z /= len;
-            this.w /= len;
+            return new Vector4(
+                this.x / len,
+                this.y / len,
+                this.z / len,
+                this.w / len
+            );
         }
 
         /**
@@ -106,10 +108,19 @@ var CG = (function(CG) {
          * @param {Number} w 
          */
         set(x, y, z, w) {
-            this.x = x || 0;
-            this.y = y || 0;
-            this.z = z || 0;
-            this.w = w || 0;
+            x = x || 0;
+            y = y || 0;
+            z = z || 0;
+            w = w || 0;
+            if (
+                typeof x !== "number" ||
+                typeof y !== "number" ||
+                typeof z !== "number" ||
+                typeof w !== "number") throw "Not a real number";
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
         }
 
         /**
@@ -134,7 +145,7 @@ var CG = (function(CG) {
          * Transforms this vector in a zero 4D vector
          */
         zero() {
-            this.set(0,0,0,0);
+            this.set();
         }
     }
 

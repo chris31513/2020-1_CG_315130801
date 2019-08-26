@@ -110,13 +110,15 @@ var CG = (function(CG) {
         }
 
         /**
-         * Makes this a unitary vector preserving the direction
+         * Returns a unitary vector preserving the direction
          */
         normalize() {
             var len = this.length();
-            this.x /= len;
-            this.y /= len;
-            this.z /= len;
+            return new Vector3(
+                this.x / len,
+                this.y / len,
+                this.z / len
+            );
         }
 
         /**
@@ -160,7 +162,7 @@ var CG = (function(CG) {
          * Transforms this vector in a zero 3D vector
          */
         zero() {
-            this.set(0,0,0);
+            this.set();
         }
     }
 
