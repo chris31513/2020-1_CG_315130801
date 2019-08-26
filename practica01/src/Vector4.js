@@ -141,6 +141,7 @@ var CG = (function(CG) {
             return Vector4.distance(new Vector4(), this);
         }
 
+
         /**
          * Transforms this vector in a zero 4D vector
          */
