@@ -1,138 +1,173 @@
-var CG = (function(CG){
-	class Vector3{
+var CG = (function(CG) {
+    class Vector3 {
+        /**
+         * Creates an object that represents a three components vector,
+         * if no params are passed, a zero vector is created instead.
+         * @param {Number} x 
+         * @param {Number} y 
+         * @param {Number} z 
+         */
+        constructor(x, y, z) {
+            this.set(x, y, z);
+        }
 
-		/*Constructor del vector de tercera dimensión.*/
-		constructor(x,y,z){
-			if(x == undefined){
-				this.x = 0;
-			}else{
-				this.x = x;
-			}
-			if(y == undefined){
-				this.y = 0;
-			}else{
-				this.y = y;
-			}
-			if(z == undefined){
-				this.z = 0;
-			}else{
-				this.z = z;
-			}
-		}
-		/*Suma de vectores entrada por entrada.*/
-		static add(u, v){
-			vector = Vector3(u.x + v.x, u.y + v.y, u.z + v.z);
-			return vector;
-		}
+        /**
+         * Returns a new Vector3 which is the sum of its components
+         * @param {Vector3} u first vector
+         * @param {Vector3} v second vector
+         * @return {Vector3}
+         */
+        static add(u, v) {
+            return new Vector3(u.x+v.x, u.y+v.y, u.z+v.z);
+        }
+        
+        /**
+         * Returns the angle between two vectors
+         * @param {Vector3} u first vector
+         * @param {Vector3} v second vector
+         * @return {Number}
+         */
+        static angle(u, v) {
+            return Math.acos(
+                Vector3.dot(u,v) / (u.length() * v.length())
+            );
+        }
 
-		/*Calcula el ángulo que se forma entre dos vectores.*/
-		static angle(u, v){
-			x = u.x * v.x + u.y * v.y + u.z * v.z;
-			y = Math.pow(Math.pow(u.x,2) + Math.pow(u.y,2) + Math.pow(u.z,2), 1/2);
-			z = Math.pow(Math.pow(v.x,2) + Math.pow(v.y,2) + Math.pow(v.z,2), 1/2);
-			y = z * y;
-			x = x / y;
-			x = Math.acos(x);
-			return x;
-		}
+        /**
+         * Returns a new Vector3 with the same components than this
+         * @return {Vector3}
+         */
+        clone() {
+            return new Vector3(this.x, this.y, this.z);
+        }
 
-		/*Regresa una instancia de Vector3 con los mismo atributos del vector que la invocó.*/
-		clone(){
-			vector = Vector3(this.x, this.y, this.z);
-			return vector;
-		}
+        /**
+         * Returns the cross product of two 3D vectors
+         * @param {Vector3} u 
+         * @param {Vector3} v 
+         * @return {Vector3}
+         */
+        static cross(u, v) {
+            return new Vector3(
+                u.y*v.z - u.z*v.y,
+                u.z*v.x - u.x*v.z,
+                u.x*v.y - u.y*v.x
+            );
+        }
 
-		/*Regresa el producto cruz de dos vectores.*/
-		static cross(u, v){
-			x = u.y * v.z;
-			x1 = u.z * v.y;
-			x1 = x1 * -1;
-			x = x + x1;
-			y = u.x * v.z;
-			y1 = u.z * v.x;
-			y1 = y1 * -1;
-			y = y + y1;
-			z = u.x * v.y;
-			z1 = u.y * v.x;
-			z1 = z1 * -1;
-			z = z + z1;
-			vector = Vector3(x, y * -1, z);
-			return vector;
-		}
+        /**
+         * Returns the distance between two 3D vectors
+         * @param {Vector3} u 
+         * @param {Vector3} v 
+         * @return {Number}
+         */
+        static distance(u, v) {
+            return Math.sqrt(Vector3.squareDistance(u,v));
+        }
 
-		/*Regresa la distancia que hay entre dos vectores.*/
-		static distance(u, v){
-			x = Math.pow((v.x - u.x), 2);
-			y = Math.pow((v.y - u.y), 2);
-			z = Math.pow((v.z - u.z), 2);
-			w = Math.pow(x + y + z, 1/2);
-			return w;
-		}
+        /**
+         * Calculates the dot product between two 3D vectors
+         * @param {Vector3} u 
+         * @param {Vector3} v 
+         * @return {Number}
+         */
+        static dot (u, v) {
+            return u.x*v.x + u.y*v.y + u.z*v.z;
+        }
 
-		/*Regresa el producto punto de dos vectores*/
-		static dot(u, v){
-			return (u.x * v.x) + (u.y * v.y) + (u.z * v.z);
-		}
+        /**
+         * Returns true if the components of both 3D vectors are almost the same
+         * (under 0.000001 of difference)
+         * @param {Vector3} u 
+         * @param {Vector3} v
+         * @return {Boolean}
+         */
+        static equals(u, v) {
+            var epsilon = 0.000001;
+            return (
+                Math.abs(u.x - v.x) <= epsilon &&
+                Math.abs(u.y - v.y) <= epsilon &&
+                Math.abs(u.z - v.z) <= epsilon
+            );
+        }
 
-		/*Compara dos vectores y regresa true si difieren a lo más en 0.000001 o false en cualquier otro caso.*/
-		static equals(u, v){
-			epsilon = 0.000001;
-			return (((u.x >= v.x) || (u.x <= (v.x + epsilon))) && ((u.y >= v.y) || (u.y <= v.x + epsilon)) && ((u.z >= v.z) || (u.z <= v.z + epsilon))) || (((v.x >= u.x) || (v.x <= u.x + epsilon)) && ((v.y >= u.y) || (v.y <= u.y + epsilon)) && ((v.z >= u.z) || (v.z <= u.z + epsilon)));
-		}
+        /**
+         * Returns true if both 3D vectors are exactly the same
+         * @param {Vector3} u 
+         * @param {Vector3} v 
+         * @return {Boolean}
+         */
+        static exactEquals(u, v) {
+            return u.x === v.x && u.y === v.y && u.z === v.z;
+        }
 
-		/*Compara dos vectores y regresa true si son exactamente iguales*/
-		static exactEquals(u, v){
-			if(u.x == v.x && u.y == v.y && u.z == v.z){
-				return true;
-			}
-			return false;
-		}
+        /**
+         * Calculates the length (norm) of this vector
+         * @return {Number}
+         */
+        length() {
+            return Math.sqrt(this.squaredLength());
+        }
 
-		/*Regresa la norma del vector que lo invocó.*/
-		length(){
-			x = Math.pow(this.x, 2);
-			y = Math.pow(this.y, 2);
-			z = Math.pow(this.z, 2);
-			w = Math.pow(x + y + z, 1/2);
-			return w;
-		}
+        /**
+         * Returns a unitary vector preserving the direction
+         */
+        normalize() {
+            var len = this.length();
+            return new Vector3(
+                this.x / len,
+                this.y / len,
+                this.z / len
+            );
+        }
 
-		/*Regresa el vector normalizado del vector que lo invocó.*/
-		normalize(){
-			mag = this.length();
-			x = this.x / mag;
-			y = this.y / mag;
-			z = this.z / mag;
-			vector = Vector3(x, y, z);
-			return vector;
-		}
+        /**
+         * Changes/sets the components of this 3D vector
+         * @param {Number} x 
+         * @param {Number} y 
+         * @param {Number} z 
+         */
+        set(x, y, z) {
+            x = x || 0;
+            y = y || 0;
+            z = z || 0;
+            if (
+                typeof x !== "number" ||
+                typeof y !== "number" ||
+                typeof z !== "number") throw "Not a real number";
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
 
-		/*Remplaza a la x, y y z del vector que lo invocó por los parámetros que recibe.*/
-		set(x, y, z){
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
+        /**
+         * Returns the distance squared between two 3D vectors
+         * @param {Vector3} u 
+         * @param {Vector3} v 
+         * @return {Number}
+         */
+        static squareDistance(u, v) {
+            return (u.x-v.x)**2 + (u.y-v.y)**2 + (u.z-v.z)**2;
+        }
 
-		/*Regresa la distancia cuadra entre dos vectores*/
-		static squaredDistance(u, v){
-			return Math.pow(this.distance(u, v), 2);
-		}
+        /**
+         * Returns the length (norm) squared of this vector
+         * @return {Number}
+         */
+        squaredLength() {
+            return Vector3.distance(new Vector3(), this);
+        }
 
-		/*Regresa la norma cuadrada del vector que lo invocó.*/
-		squaredLength(){
-			return Math.pow(this.length(), 2);
-		}
+        /**
+         * Transforms this vector in a zero 3D vector
+         */
+        zero() {
+            this.set();
+        }
+    }
 
-		/*Asigna cero a todas las coordenadas del vector que invocó a la función.*/
-		zero(){
-			this.x = 0;
-			this.y = 0;
-			this.z = 0;
-		}
-	}
+    CG.Vector3 = Vector3;
+    return CG;
+}(CG || {}));
 
-	CG.Vector3 = Vector3;
-	return CG;
-
-})(CG || {});
+module.exports = CG;

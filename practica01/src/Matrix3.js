@@ -1,169 +1,248 @@
-var CG = (function(CG){
+var CG = (function(CG) {
+    class Matrix3 {
+        /**
+         * Recibe 9 parámetros numéricos y construye una matriz de 3x3.
+         * En caso de no recibir valores en los argumentos, devuelve la matriz identidad.
+         * @param {Number} a00
+         * @param {Number} a01
+         * @param {Number} a02
+         * @param {Number} a10
+         * @param {Number} a11
+         * @param {Number} a12
+         * @param {Number} a20
+         * @param {Number} a21
+         * @param {Number} a22
+         */
+        constructor(a00, a01, a02, a10, a11, a12, a20, a21, a22) {
+            this.set(a00, a01, a02, a10, a11, a12, a20, a21, a22);
+        }
 
-	class Matrix3{
+        /**
+         * devuelve la suma dos matrices.
+         * @param {Matrix3} m1
+         * @param {Matrix3} m2
+         * @return {Matrix3}
+         */
+        static add(m1, m2) {
+            const elems = [];
+            for(let i = 0; i < 3; i++) {
+                for(let j = 0; j < 3; j++) {
+                    elems.push(m1[`a${i}${j}`] + m2[`a${i}${j}`]);
+                }
+            }
+            return new Matrix3(...elems);
+        }
 
-		/*Construye una matriz 3x3.*/
-		constructor(a00, a01, a02,
-					a10, a11, a12,
-					a20, a21, a22){
-			if(a00 == undefined){
-				this.a00 = 1;
-			}else{
-				this.a00 = a00;
-			}
-			if(a01 == undefined){
-				this.a01 = 0;
-			}else{
-				this.a01 = a01;
-			}
-			if(a02 == undefined){
-				this.a02 = 0;
-			}else{
-				this.a02 = a02;
-			}
-			if(a10 == undefined){
-				this.a10 = 0;
-			}else{
-				this.a10 = a10;
-			}
-			if(a11 == undefined){
-				this.a11 = 1;
-			}else{
-				this.a11 = a11;
-			}
-			if(a12 == undefined){
-				this.a12 = 0;
-			}else{
-				this.a12 = a12;
-			}
-			if(a20 == undefined){
-				this.a20 = 0;
-			}else{
-				this.a20 = a20;
-			}
-			if(a21 == undefined){
-				this.a21 = 0;
-			}else{
-				this.a21 = a21;
-			}
-			if(a22 == undefined){
-				this.a22 = 1;
-			}else{
-				this.a22 = a22;
-			}
-		}
+        /**
+         * Regresa el elemento ajdunto (i, j) de la matriz que lo invoca.
+         * @param {Number} i
+         * @param {Number} j
+         */
+        adj(i, j) {
+            const minor = [];
+            for(let r = 0; r < 3; r++) {
+                for(let c = 0; c < 3; c++) {
+                    if (r == i || c == j) continue;
+                    minor.push(this[`a${r}${c}`]);
+                }
+            }
+            return (-1)**(i*j)*det2(...minor);
+        }
 
-		/*Regresa la matriz suma de dos matrices 3x3.*/
-		static add(m1, m2){
-			matrix = Matrix3(m1.a00 + m2.a00, m1.a01 + m2.a01, m1.a02 + m2.a02,
-							 m1.a10 + m2.a10, m1.a11 + m2.a11, m1.a12 + m2.a12,
-							 m1.a20 + m2.a20, m1.a21 + m2.a21, m1.a22 + m2.a22);
-			return matrix;
-		}
+        /**
+         * devuelve la matriz adjunta (o matriz de cofactores), de la matriz con
+         * que se invoca la función.
+         * @return {Matrix3}
+         */
+        adjoint() {
+            const adjunta = [];
+            for(let r = 0; r < 3; r++) {
+                for(let c = 0; c < 3; c++) {
+                    adjunta.push[this.adj(c,r)];
+                }
+            }
+            return new Matrix3(...adjunta).transpose();
+        }
 
-		/*Regresa la matriz adjunta de la matriz que invocó a la función.*/
-		adjoint(){
-			ad00 = (this.a11 * this.a22) - (this.a12 * this.a21);
-			ad01 = -1 * ((this.a10 * this.a22) - (this.a12 * this.a20));
-			ad02 = (this.a10 * this.a21) - (this.a11 * this.a20);
-			ad10 = -1 * ((this.a01 * this.a22) - (this.a02 * this.a21));
-			ad11 = (this.a00 * this.a22) - (this.a02 * this.a21);
-			ad12 = -1 ((this.a00 * this.a21) - (this.a01 * this.a20));
-			ad20 = (this.a01 * this.a12) - (this.a02 * this.a11);
-			ad21 = -1 * ((this.a00 * this.a12) - (this.a02 * this.a10));
-			ad22 = (this.a00 * this.a11) - (this.a01 * this.a10);
-			matrix = Matrix3(ad00, ad01, ad02,
-			                 ad10, ad11, ad12,
-			                 ad20, ad21, ad22);
-			return matrix;
-		}
+        /**
+         * devuelve un objeto el cual contiene los mismos valores que el objeto
+         * desde el cual se invoco la función.
+         * @return {Matrix3}
+         */
+        clone() {
+            const elems = [];
+            for(let i = 0; i < 3; i++) {
+                for(let j = 0; j < 3; j++) {
+                    elems.push(this[`a${i}${j}`]);
+                }
+            }
+            return new Matrix3(...elems);
+        }
 
-		/*Regresa una instancia de Matrix3 con los mismos atributos que la matriz que invocó a la función.*/
-		clone(){
-			matrix = Matrix3(this.a00, this.a01, this.a02,
-							 this.a10, this.a11, this.a12,
-							 this.a20, this.a21, this.a22);
-			return matrix;
-		}
+        /**
+         * devuelve el determinante de la matriz.
+         * @return {Number}
+         */
+        determinant() {
+            return (
+                 this.a00*this.adj(0,0)
+                +this.a01*this.adj(0,1)
+                +this.a02*this.adj(0,2)
+            );
+        }
 
-		/*Regresa el determinante de la matriz que invocó a la función.*/
-		determinant(){
-			a = this.a00 * this.a11 * this.a22;
-			b = this.a01 * this.a12 * this.a20;
-			c = this.a02 * this.a10 * this.a21;
-			d = this.a02 * this.a11 * this.a20;
-			e = this.a12 * this.a21 * this.a00;
-			f = this.a22 * this.a01 * this.a10;
-			d = d + e + f;
-			d = d * -1;
-			a = a + b + c + d;
-			return a; 
-		}
+        /**
+         * devuelve verdadero en caso de que sus argumentos sean aproximadamente
+         * iguales, bajo una ε = 0.000001, y falso en caso contrario.
+         * @param {Matrix3} m1
+         * @param {Matrix3} m2
+         * @return {Boolean}
+         */
+        static equals(m1, m2) {
+            const e = 0.000001;
+            const eq = (a, b) => Math.abs(a-b) < e;
+            let flag = true;
+            for(let i = 0; i < 3; i++) {
+                for(let j = 0; j < 3; j++) {
+                    flag = flag && eq(m1[`a${i}${j}`], m2[`a${i}${j}`]);
+                }
+            }
+            return flag;
+        }
 
-		/*Compara si dos matrices son exactamante iguales.*/
-		static exactEquals(m1, m2){
-			return m1.a00 == m2.a00 && m1.a01 == m2.a01 && m1.a02 == m2.a02 && 
-				   m1.a10 == m2.a10 && m1.a11 == m2.a11 && m1.a12 == m2.a12 &&
-				   m1.a20 == m2.a20 && m1.a21 == m2.a21 && m1.a22 == m2.a22;
-		}
+        /**
+         * devuelve verdadero en caso de que sus argumentos sean exactamente
+         * iguales, y falso en caso contrario.
+         * @param {Matrix3} m1
+         * @param {Matrix3} m2
+         * @return {Boolean}
+         */
+        static exactEquals(m1, m2) {
+            let flag = true;
+            for(let i = 0; i < 3; i++) {
+                for(let j = 0; j < 3; j++) {
+                    flag = flag && (m1[`a${i}${j}`] === m2[`a${i}${j}`]);
+                }
+            }
+            return flag;
+        }
 
-		/*Convierte a la matriz que invocó a la función en la matriz identidad.*/
-		identity(){
-			this.a00 = 1;
-			this.a01 = 0;
-			this.a02 = 0;
-			this.a10 = 0;
-			this.a11 = 1;
-			this.a12 = 0;
-			this.a20 = 0;
-			this.a21 = 0;
-			this.a22 = 0;
-		}
+        /**
+         * asigna los valores de la matriz identidad a la matriz desde donde se
+         * invoco la función.
+         */
+        identity() {
+            this.set();
+        }
 
-		/*Regresa la matriz resultado de la multiplicación de matrices.*/
-		static multiply(m1, m2){
-			m3 = Matrix3((m1.a00 * m2.a00) + (m1.a01 * m2.a10) + (m1.a02 * m2.a20), (m1.a00 * m2.a01) + (m1.a01 * m2.a11) + (m1.a02 * m2.a21), (m1.a00 * m2.a02) + (m1.a01 * m2.a12) + (m1.a02 * m2.a22),
-				         (m1.a10 * m2.a00) + (m1.a11 * m2.a10) + (m1.a12 * m2.a20), (m1.a10 * m2.a01) + (m1.a11 * m2.a11) + (m1.a12 * m2.a21), (m1.a10 * m2.a02) + (m1.a11 * m2.a12) + (m1.a12 * m2.a22),
-				         (m1.a20 * m2.a00) + (m1.a21 * m2.a10) + (m1.a22 * m2.a20), (m1.a20 * m2.a01) + (m1.a21 * m2.a11) + (m1.a22 * m2.a21), (m1.a20 * m2.a02) + (m1.a21 * m2.a12) + (m1.a22 * m2.a22));
-			return m3;
-		}
+        /**
+         * devuelve la matriz inversa de la matriz con la que se invoco la función.
+         * @return {Matrix3}
+         */
+        invert() {
+            return Matrix3.multiplyScalar(this.adjoint(), 1/this.determinant());
+        }
 
-		/*Regresa la matriz resultado de la multiplicación por escalar y una matriz.*/
-		static multiplyScalar(m1, c){
-			m3 = Matrix3(m1.a00 * c, m1.a01 * c, m1.a02 * c,
-				         m1.a10 * c, m1.a11 * c, m1.a12 * c,
-				         m1.a20 * c, m1.a21 * c, m1.a22 * c);
-			return m3;
-		}
+        /**
+         * devuelve la multiplicación de dos matrices.
+         * @param {Matrix3} m1
+         * @param {Matrix3} m2
+         * @return {Matrix3}
+         */
+        static multiply(m1, m2) {
+            const elems = [];
+            for(let r = 0; r < 3; r++) {
+                for(let c = 0; c < 3; c++) {
+                    let sum = 0;
+                    for(let i = 0; i < 3; i++) {
+                        sum += m1[`a${r}${i}`]*m2[`a${i}${c}`]
+                    }
+                    elems.push(sum);
+                }
+            }
+            return new Matrix3(...elems);
+        }
 
-		/*Remplaza los elementos de la matriz que invocó a la función por los que se le pasan como parámetros.*/
-		set(a00, a01, a02, a10, a11, a12, a20, a21, a20){
-			this.a00 = a00;
-			this.a01 = a01;
-			this.a02 = a02;
-			this.a10 = a10;
-			this.a11 = a11;
-			this.a12 = a12;
-			this.a21 = a21;
-			this.a22 = a22;
-		}
+        /**
+         * devuelve una matriz que es el resultado de multiplicar cada
+         * componente por un escalar.
+         * @param {Matrix3} m1
+         * @param {Number} c
+         * @return {Matrix3}
+         */
+        static multiplyScalar(m1, c) {
+            const elems = [];
+            for(let i = 0; i < 3; i++) {
+                for(let j = 0; j < 3; j++) {
+                    elems.push(m1[`a${i}${j}`]*c);
+                }
+            }
+            return new Matrix3(...elems);
+        }
 
-		/*Regresa la matriz resultado de la resta de dos matrices.*/
-		static substract(m1, m2){
-			m2 = this.multiplyScalar(m2, -1);
-			return this.add(m1, m2);
-		}
+        /**
+         * asigna nuevos valores a los componentes de la matriz con que se llama.
+         * @param {Number} a00
+         * @param {Number} a01
+         * @param {Number} a02
+         * @param {Number} a10
+         * @param {Number} a11
+         * @param {Number} a12
+         * @param {Number} a20
+         * @param {Number} a21
+         * @param {Number} a22
+         */
+        set(a00, a01, a02, a10, a11, a12, a20, a21, a22) {
+            this.a00 = a00 || 1;
+            this.a01 = a01 || 0;
+            this.a02 = a02 || 0;
+            this.a00 = a10 || 0;
+            this.a01 = a11 || 1;
+            this.a02 = a12 || 0;
+            this.a00 = a20 || 0;
+            this.a01 = a21 || 0;
+            this.a02 = a22 || 1;
+        }
 
-		/*Regresa la matriz transpuesta de la matriz que la invocó.*/
-		transpose(){
-			m = Matrix3(this.a00, this.a10, this.a20,
-				        this.a01, this.a11, this.a21,
-				        this.a02, this.a12, this.a22);
-			return m;
-		}
-	}
+        /**
+         * sustrae la matriz m2 de la matriz m1.
+         * @param {Matrix3} m1
+         * @param {Matrix3} m2
+         * @return {Matrix3}
+         */
+        static substract(m1, m2) {
+            const negM2 = Matrix3.multiplyScalar(m2, -1);
+            return Matrix3.add(m1, negM2);
+        }
 
-	CG.Matrix3 = Matrix3;
-	return CG;
+        /**
+         * devuelve la matriz transpuesta de la matriz desde donde se invocó la función.
+         */
+        transpose() {
+            const elems = [];
+            for(let j = 0; j < 3; j++) {
+                for(let i = 0; i < 3; i++) {
+                    elems.push(this[`a${i}${j}`]);
+                }
+            }
+            return new Matrix3(...elems);
+        }
+    }
 
-})(CG || {});
+    CG.Matrix3 = Matrix3;
+    return CG;
+}(CG || {}));
+
+/**
+ * Función auxiliar
+ * Devuelve el determinante de una matriz de 2x2 dados sus elementos
+ * @param {Number} a11
+ * @param {Number} a12
+ * @param {Number} a21
+ * @param {Number} a22
+ */
+function det2(a11, a12, a21, a22) {
+    return (a11*a22-a12*a21);
+}
+
+module.exports = CG;

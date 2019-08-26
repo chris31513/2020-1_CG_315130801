@@ -1,121 +1,157 @@
-var CG = (function(CG){
-	
-	class Vector4{
+var CG = (function(CG) {
+    class Vector4 {
+        /**
+         * Creates an object that represents a four components vector,
+         * if no params are passed, a zero vector is created instead.
+         * @param {Number} x 
+         * @param {Number} y 
+         * @param {Number} z 
+         * @param {Number} w 
+         */
+        constructor(x, y, z, w) {
+            set(x, y, z, w);
+        }
 
-		/*Constructor de un vector de 4 dimensiones.*/	
-		constructor(x, y, z, w){
-			if(x == undefined){
-				this.x = 0;
-			}else{
-				this.x = x;
-			}
-			if(y == undefined){
-				this.y = 0;
-			}else{
-				this.y = y;
-			}
-			if(z == undefined){
-				this.z = 0;
-			}else{
-				this.z = z;
-			}
-			if(w == undefined){
-				this.w = 0;
-			}else{
-				this.w = w;
-			}
-		}
+        /**
+         * Returns a new 4D vector which is the sum of its components
+         * @param {Vector4} u 
+         * @param {Vector4} v 
+         * @return {Vector4}
+         */
+        static add(u, v) {
+            return new Vector4( u.x + v.x, u.y + v.y, u.z + v.z, u.w + v.w );
+        }
 
-		/*Regresa la suma de dos vectores de tamaño 4.*/
-		static add(u, v){
-			vector = Vector4(u.x + v.x, u.y + v.y, u.z + v.z, u.w + v.w);
-			return vector;
-		}
+        /**
+         * Returns a new 4D vector with the same components than this
+         * @return {Vector4}
+         */
+        clone() {
+            return new Vector4(this.x, this.y, this.z, this.w);
+        }
 
-		/*Regresa una instancia de Vector4 con los mismos atributos que el vector que la invocó.*/
-		clone(){
-			vector = Vector4(this.x, this.y, this.z, this.w);
-			return vector;
-		}
+        /**
+         * Returns the distance between two 4D vectors
+         * @param {Vector4} u 
+         * @param {Vector4} v 
+         * @return {Number}
+         */
+        static distance(u, v) {
+            return Math.sqrt(Vector4.squareDistance(u, v));
+        }
 
-		/*Regresa la distancia entre dos vectores.*/
-		static distance(u, v){
-			x = Math.pow((v.x - u.x), 2);
-			y = Math.pow((v.y - u.y), 2);
-			z = Math.pow((v.z - u.z), 2);
-			w = Math.pow((v.w - u.w), 2);
-			d = Math.pow(x + y + z + w, 1/2);
-			return d;
-		}
+        /**
+         * Calculates the dot product between two 4D vectors
+         * @param {Vector4} u 
+         * @param {Vector4} v 
+         * @return {Number}
+         */
+        static dot(u, v) {
+            return u.x*v.x + u.y*v.y + u.z*v.z + u.w*v*w;
+        }
 
-		/*Regresa el producto punto de dos vectores.*/
-		static dot(u, v){
-			return (u.x * v.x) + (u.y * v.y) + (u.z * v.z) + (u.w * v.w);
-		}
+        /**
+         * Returns true if the components of both 4D vectors are almost the same
+         * (under 0.000001 of difference)
+         * @param {Vector4} u 
+         * @param {Vector4} v
+         * @return {Boolean}
+         */
+        static equals(u, v) {
+            var epsilon = 0.000001;
+            return (
+                Math.abs(u.x - v.x) <= epsilon &&
+                Math.abs(u.y - v.y) <= epsilon &&
+                Math.abs(u.z - v.z) <= epsilon &&
+                Math.abs(u.w - v.w) <= epsilon
+            );
+        }
 
-		/*Compara dos vecotres y regresa true si difieren a lo más por 0.000001 en sus coordenadas, false en otro caso.*/
-		static equals(u, v){
-			epsilon = 0.000001;
-			return (((u.x >= v.x) || (u.x <= (v.x + epsilon))) && ((u.y >= v.y) || (u.y <= v.x + epsilon)) && ((u.z >= v.z) || (u.z <= v.z + epsilon)) && ((u.w >= v.w) || (u.w <= v.w + epsilon))) || (((v.x >= u.x) || (v.x <= u.x + epsilon)) && ((v.y >= u.y) || (v.y <= u.y + epsilon)) && ((v.z >= u.z) || (v.z <= u.z + epsilon)) && ((v.w >= u.w) || (v.w <=  u.w + epsilon)));
-		}
+        /**
+         * Returns true if both 4D vectors are exactly the same
+         * @param {Vector4} u 
+         * @param {Vector4} v 
+         * @return {Boolean}
+         */
+        static exactEquals(u, v) {
+            return (
+                (u.x === v.x) && (u.y === v.y) && (u.z === v.z) && (u.w === v.w)
+            );
+        }
 
-		/*Compara dos vectores y regresa true si son exactamente el mismo vector.*/
-		static exactEquals(u, v){
-			if(u.x == v.x && u.y == v.y && u.z == v.z && u.w == v.w){
-				return true;
-			}
-			return false;
-		}
+        /**
+         * Calculates the length (norm) of this vector
+         * @return {Number}
+         */
+        length() {
+            return Math.sqrt(this.squaredLength());
+        }
 
-		/*Regresa la norma del vector que invocó a la función-*/
-		length(){
-			x = Math.pow(this.x, 2);
-			y = Math.pow(this.y, 2);
-			z = Math.pow(this.z, 2);
-			w = Math.pow(this.w, 2);
-			l = Math.pow(x + y + z + w, 1/2);
-			return l;
-		}
+        /**
+         * Returns a unitary vector preserving the direction
+         */
+        normalize() {
+            var len = this.length();
+            return new Vector4(
+                this.x / len,
+                this.y / len,
+                this.z / len,
+                this.w / len
+            );
+        }
 
-		/*Regresa el vector normalizado del vector que invocó la función.*/
-		normalize(){
-			mag = this.length();
-			x = this.x / mag;
-			y = this.y / mag;
-			z = this.z / mag;
-			w = this.w / mag;
-			vector = Vector4(x, y, z, w);
-			return vector;
-		}
+        /**
+         * Changes/sets the components of this 4D vector
+         * @param {Number} x 
+         * @param {Number} y 
+         * @param {Number} z 
+         * @param {Number} w 
+         */
+        set(x, y, z, w) {
+            x = x || 0;
+            y = y || 0;
+            z = z || 0;
+            w = w || 0;
+            if (
+                typeof x !== "number" ||
+                typeof y !== "number" ||
+                typeof z !== "number" ||
+                typeof w !== "number") throw "Not a real number";
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
 
-		/*Remplaza las coordenadas del vector que invocó a la función por las que se le pasan como parámetros.*/
-		set(x, y, z, w){
-			this.x = x
-			this.y = y;
-			this.z = z;
-			this.w = w;
-		}
+        /**
+         * Returns the distance squared between two 4D vectors
+         * @param {Vector4} u 
+         * @param {Vector4} v 
+         * @return {Number}
+         */
+        static squareDistance(u, v) {
+            return (u.x-v.x)**2 + (u.y-v.y)**2 + (u.z-v.z)**2 + (u.w-v.w)**2;
+        }
 
-		/*Regresa la distancia cuadrada entre dos vectores.*/
-		static squaredDistance(u, v){
-			return Math.pow(this.distance(u, v), 2);
-		}
+        /**
+         * Returns the length (norm) squared of this vector
+         * @return {Number}
+         */
+        squaredLength() {
+            return Vector4.distance(new Vector4(), this);
+        }
 
-		/*Regresa la norma cuadrada del vector que invocó a la función.*/
-		squaredLength(){
-			return Math.pow(this.length(), 2);
-		}
 
-		/*Le asigna 0 a las coordenadas del vector que invocó a la función.*/
-		zero(){
-			this.x = 0;
-			this.y = 0;
-			this.z = 0;
-			this.w = 0;
-		}
-	}
+        /**
+         * Transforms this vector in a zero 4D vector
+         */
+        zero() {
+            this.set();
+        }
+    }
 
-	CG.Vector4 = Vector4;
-	return CG;
+    CG.Vector4 = Vector4;
+    return CG;
+}(CG || {}));
 
-})(CG || {});
+module.exports = CG;
