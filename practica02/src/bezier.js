@@ -1,8 +1,10 @@
 $(document).ready(function() {
+    /*Se carga el canvas desde el archivo HTML y se obtiene el contexto, además de colorear el fondo de azul*/
     var canvas = document.getElementById('canvas');
     canvas.style.background = "#009FFD";
     var context = canvas.getContext('2d');
 
+    /*Todo lo de dentro del beginPath dibuja las nubes en desorden*/
     context.beginPath();
     context.moveTo(650, 100);
     context.bezierCurveTo(650 - 40, 100 + 10, 650 - 20, 100 + 180, 650 + 60, 100 + 70);
@@ -44,28 +46,37 @@ $(document).ready(function() {
     context.bezierCurveTo(350 + 150, 100 - 75, 350 + 80, 100 - 60, 350 + 70, 100 - 30);
     context.bezierCurveTo(350 + 30, 100 - 75, 350 - 10, 100 - 60, 350, 100);
     context.closePath();
+
+    /*Se colorean las nubes de blanco y se insertan al contexto*/
     context.fillStyle = "#ffff";
     context.fill();
     context.stroke();
 
+    /*Se comienza un nuevo camino para dibujar el pasto, la primer curva de Bezier corresponde a la prueba que hice para ver como dibujar pasto*/
     context.beginPath();
     context.moveTo(3, 644);
     context.bezierCurveTo(20, 600, 1, 600, 30, 644);
 
+    /*Se dibuja el pasto apartir de la prueba inicial*/
     for (var i = 30; i < 1269; i+=30) {
         context.moveTo(i, 644);
         context.bezierCurveTo(20 + i, 600, i, 600, 30 + i, 644);
     }
 
     context.closePath();
+
+    /*Se colorea el pasto de verde y se inserta al contexto*/
     context.fillStyle = "green";
     context.fill();
     context.stroke();
 
+    /*Se comienza un nuevo camino para dibujar el sol en la esquina*/
     context.beginPath();
     context.moveTo(0, 0);
     context.bezierCurveTo(50, 0, 60, 60, 0, 80);
     context.closePath();
+
+    /*Se colorea el sol y se inserta en el contexto*/
     context.fillStyle = "yellow";
     context.fill();
     context.stroke();
