@@ -19,4 +19,5 @@ jmcareaga@ciencias.unam.mx
 
 
 # Descripción #
-Repositorio dedicado a la clase de Graficación por Computadora.
+Repositorio dedicado a la clase de Graficación por Computadora.<br>
+Este repositorio pertenece a Christian Rodrigo García Gómez, Juan deberá ser conciderado cuando las entregas sean en pareja.
