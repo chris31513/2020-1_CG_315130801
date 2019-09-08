@@ -43,8 +43,6 @@ $(document).ready(function() {
 
         /*El ciclo simula el recorrido del circulo pequeño al rededor del grande, por lo que dibuja la curva correspondiente al 
         movimiento, además, la i se incrementa en 0.1 para que los puntos se vean más marcados*/
-        context.beginPath();
-
         for (var i = 1; i <= 360; i+=0.1) {
 
             x = centroX+(R+r)*Math.cos(i * (Math.PI / 180))-r*Math.cos(Math.PI/5 * 20+(R+r)/r*i * (Math.PI / 180));    
@@ -52,9 +50,6 @@ $(document).ready(function() {
 
             context.fillRect(x, y, 1, 1);
         }
-
-        context.closePath();
-        context.stroke();
     }
 
     /*Lee el evento de cambio en el input de rango, limpia el canvas y vuelve a dibujar todo lo demás*/
