@@ -38,9 +38,6 @@ $(document).ready(function() {
         /*Radio del circulo pequeño*/
         var r=R/k;
 
-        var x;
-        var y;
-
         /*El ciclo simula el recorrido del circulo pequeño al rededor del grande, por lo que dibuja la curva correspondiente al 
         movimiento, además, la i se incrementa en 0.1 para que los puntos se vean más marcados*/
         for (var i = 1; i <= 360; i+=0.1) {
