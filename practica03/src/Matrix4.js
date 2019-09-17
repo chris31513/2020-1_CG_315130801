@@ -244,7 +244,8 @@ var CG = (function(CG) {
         multiplyVector(v){
             return new Vector4((v.x * this.a00) + (v.y * this.a10) + (v.z * this.a20) + (v.w * this.a30), 
                                (v.x * this.a01) + (v.y * this.a11) + (v.z * this.a21) + (v.w * this.a31),
-                               (v.x * this.a02) + (v.y * this.a12) + (v.z * this.a22) + (v.w));
+                               (v.x * this.a02) + (v.y * this.a12) + (v.z * this.a22) + (v.w * this.a32),
+                               (v.x * this.a03) + (v.y * this.a13) + (v.z * this.a23) + (v.w * this.a33));
         }
 
         static ortho(left, right, bottom, top, near, far){
