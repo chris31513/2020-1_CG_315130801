@@ -222,6 +222,79 @@ var CG = (function(CG) {
             }
             return new Matrix4(...elems);
         }
+
+        static frustum(left, right, bottom, top, near, far){
+            return new Matrix4((2 * near) / right - left, 0, (right + left) / (right - left), 0,
+                               0, (2 * near) / (top - bottom), (top + bottom) / (top - bottom), 0,
+                               0, 0, -(far + near) / (far - near), (-2 * far * near) / (far - near),
+                               0, 0, -1, 0);
+        }
+
+        static lookAt(eye, center, up){
+            Vector3 f = eye.sub(center, eye).normalize();
+            Vector3 u = up.normalize();
+            Vector3 s = eye.cross(f, u).normalize();
+            u = eye.cross(s, f);
+            return new Matrix4(s.x, u.x, -1*f.x, 0,
+                               s.y, u.y, -1*f.y, 0,
+                               s.z, u.z, -1*f.z, 0,
+                               -1*eye.dot(s, eye), -1*eye.dot(u, eye), eye.dot(f, eye), 0);
+        }
+
+        multiplyVector(v){
+            return new Vector4((v.x * this.a00) + (v.y * this.a10) + (v.z * this.a20) + (v.w * this.a30), 
+                               (v.x * this.a01) + (v.y * this.a11) + (v.z * this.a21) + (v.w * this.a31),
+                               (v.x * this.a02) + (v.y * this.a12) + (v.z * this.a22) + (v.w));
+        }
+
+        static ortho(left, right, bottom, top, near, far){
+            return new Matrix4(2 / (right - left), 0, 0, -1*((right + left) / (right - left)),
+                               0, 2 / (top - bottom), 0, -1*((top + bottom) / (top - bottom)),
+                               0, 0, -2/(far - near), -1*((far + near) / (far - near)),
+                               0, 0, 0, 1);
+        }
+
+        static perspective(fovy, aspect, near, far){
+            return new Matrix4(1 / (aspect * (Math.tan(fovy/2))), 0, 0, 0,
+                               0, 1 / (Math.tan(fovy/2)), 0, 0,
+                               0, 0, -1*((far + near) / (far - near)), -1*((2 * (far * near)) / (far - near)),
+                               0, 0, -1, 0);
+        }
+
+        static rotateX(rad){
+            return new Matrix4(1, 0, 0, 0,
+                               0, Math.cos(rad), -1*Math.sin(rad), 0,
+                               0, Math.sin(rad), Math.cos(rad), 0,
+                               0, 0, 0, 1);
+        }
+
+        static rotateY(rad){
+            return new Matrix4(Math.cos(rad), 0, Math.sin(rad), 0
+                               0, 1, 0, 0,
+                               -1*Math.sin(rad), 0, Math.cos(rad), 0,
+                               0, 0, 0, 1);
+        }
+
+        static rotateZ(rad){
+            return new Matrix4(Math.cos(rad), -1*Math.sin(rad), 0, 0,
+                               Math.sin(rad), Math.cos(rad), 0, 0,
+                               0, 0, 1, 0,
+                               0, 0, 0, 1);
+        }
+
+        static scale(v){
+            return new Matrix4(v.x, 0, 0, 0,
+                               0, v.y, 0, 0,
+                               0, 0, v.z, 0,
+                               0, 0, 0, 1);
+        }
+
+        static translate(v){
+            return new Matrix4(1, 0, 0, v.x,
+                               0, 1, 0, v.y,
+                               0, 0, 1, v.z,
+                               0, 0, 0, 1);
+        }
     }
 
     CG.Matrix4 = Matrix4;

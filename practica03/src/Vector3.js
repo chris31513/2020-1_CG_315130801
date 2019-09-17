@@ -20,6 +20,10 @@ var CG = (function(CG) {
         static add(u, v) {
             return new Vector3(u.x+v.x, u.y+v.y, u.z+v.z);
         }
+
+        static sub(u, v) {
+            return new Vector3(u.x - v.x, u.y - v.y, u.z - v.z);
+        }
         
         /**
          * Returns the angle between two vectors
