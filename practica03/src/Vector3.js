@@ -170,4 +170,3 @@ var CG = (function(CG) {
     return CG;
 }(CG || {}));
 
-module.exports = CG;

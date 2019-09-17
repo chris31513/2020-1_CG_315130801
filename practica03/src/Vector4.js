@@ -153,5 +153,3 @@ var CG = (function(CG) {
     CG.Vector4 = Vector4;
     return CG;
 }(CG || {}));
-
-module.exports = CG;
