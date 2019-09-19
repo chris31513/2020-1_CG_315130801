@@ -223,6 +223,16 @@ var CG = (function(CG) {
             return new Matrix4(...elems);
         }
 
+        /**
+        * devuelve la matrix que representa la piramide de proyección.
+        * @param {int} left
+        * @param {int} right
+        * @param {int} bottom
+        * @param {int} top
+        * @param {int} near
+        * @param {int} far
+        * @return {Matrix4}
+        */
         static frustum(left, right, bottom, top, near, far){
             return new Matrix4((2 * near) / right - left, 0, (right + left) / (right - left), 0,
                                0, (2 * near) / (top - bottom), (top + bottom) / (top - bottom), 0,
@@ -230,6 +240,14 @@ var CG = (function(CG) {
                                0, 0, -1, 0);
         }
 
+
+        /**
+        * devuelve la matriz de la cámara.
+        * @param {Vector3} eye
+        * @param {Vector3} center
+        * @param {Vector3} up
+        * @return {Matrix4}
+        */
         static lookAt(eye, center, up){
             Vector3 f = eye.sub(center, eye).normalize();
             Vector3 u = up.normalize();
@@ -241,6 +259,11 @@ var CG = (function(CG) {
                                -1*eye.dot(s, eye), -1*eye.dot(u, eye), eye.dot(f, eye), 0);
         }
 
+        /**
+        * devuelve la multiplicación de un vector por la matriz que lo llama.
+        * @param {Vector4} v
+        * @return {Matrix4}
+        */
         multiplyVector(v){
             return new Vector4((v.x * this.a00) + (v.y * this.a10) + (v.z * this.a20) + (v.w * this.a30), 
                                (v.x * this.a01) + (v.y * this.a11) + (v.z * this.a21) + (v.w * this.a31),
@@ -248,6 +271,16 @@ var CG = (function(CG) {
                                (v.x * this.a03) + (v.y * this.a13) + (v.z * this.a23) + (v.w * this.a33));
         }
 
+        /**
+        * devuelve la proyección ortogonal.
+        * @param {int} left
+        * @param {int} right
+        * @param {int} bottom
+        * @param {int} top
+        * @param {int} near
+        * @param {int} far
+        * @return {Matrix4}
+        */
         static ortho(left, right, bottom, top, near, far){
             return new Matrix4(2 / (right - left), 0, 0, -1*((right + left) / (right - left)),
                                0, 2 / (top - bottom), 0, -1*((top + bottom) / (top - bottom)),
@@ -255,6 +288,14 @@ var CG = (function(CG) {
                                0, 0, 0, 1);
         }
 
+        /**
+        * devuelve la matriz de perspectiva en 3D.
+        * @param {int} fovy
+        * @param {int} aspect
+        * @param {int} near
+        * @param {int} far
+        * @return {Matrix4}
+        */
         static perspective(fovy, aspect, near, far){
             return new Matrix4(1 / (aspect * (Math.tan(fovy/2))), 0, 0, 0,
                                0, 1 / (Math.tan(fovy/2)), 0, 0,
@@ -262,6 +303,11 @@ var CG = (function(CG) {
                                0, 0, -1, 0);
         }
 
+        /**
+        * devuelve la matriz de rotación respecto al eje X.
+        * @param {int} rad.
+        * @return {Matrix4}
+        */
         static rotateX(rad){
             return new Matrix4(1, 0, 0, 0,
                                0, Math.cos(rad), -1*Math.sin(rad), 0,
@@ -269,6 +315,11 @@ var CG = (function(CG) {
                                0, 0, 0, 1);
         }
 
+        /**
+        * devuelve la matriz de rotación respecto al eje Y.
+        * @param {int} rad.
+        * @return {Matrix4}
+        */
         static rotateY(rad){
             return new Matrix4(Math.cos(rad), 0, Math.sin(rad), 0
                                0, 1, 0, 0,
@@ -276,6 +327,11 @@ var CG = (function(CG) {
                                0, 0, 0, 1);
         }
 
+        /**
+        * devuelve la matriz de rotación respecto al eje Z.
+        * @param {int} rad.
+        * @return {Matrix4}
+        */
         static rotateZ(rad){
             return new Matrix4(Math.cos(rad), -1*Math.sin(rad), 0, 0,
                                Math.sin(rad), Math.cos(rad), 0, 0,
@@ -283,13 +339,22 @@ var CG = (function(CG) {
                                0, 0, 0, 1);
         }
 
+        /**
+        * devuelve la matriz de escalamiento en 3D.
+        * @param {Vector3} v
+        * @return {Matrix4}
+        */
         static scale(v){
             return new Matrix4(v.x, 0, 0, 0,
                                0, v.y, 0, 0,
                                0, 0, v.z, 0,
                                0, 0, 0, 1);
         }
-
+         /**
+         * devuelve la matriz de traslacion en 3D.
+         * @param {Vector3} v
+         * @return {Matrix4}
+         */
         static translate(v){
             return new Matrix4(1, 0, 0, v.x,
                                0, 1, 0, v.y,

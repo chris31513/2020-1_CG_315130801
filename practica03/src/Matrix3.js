@@ -228,24 +228,46 @@ var CG = (function(CG) {
             return new Matrix3(...elems);
         }
 
+        /**
+        * devule el resultado de multiplicar la matriz que llama a la función con el vector que se le pasa como parámetro.
+        * @param {Vector3} v
+        * @return {Matrix3}
+        */
         multiplyVector(v){
             return new Vector3((v.x * this.a00) + (v.y * this.a10) + (v.z * this.a20), 
                                (v.x * this.a01) + (v.y * this.a11) + (v.z * this.a21),
                                (v.x * this.a02) + (v.y * this.a12) + (v.z * this.a22));
         }
 
+        /**
+        * devuelve la matriz de rotación usando como radio el parámetro rad.
+        * @param {int} rad
+        * @return {Matrix3}
+        */
         static rotate(rad){
             return new Matrix3(Math.cos(rad), -Math.sin(rad), 0,
                                Math.sin(rad), Math.cos(rad), 0,
                                0, 0, 1);
         }
 
+        /**
+        * devuelve la matriz de escalamiento 2D.
+        * @param {int} sx
+        * @param {int} sy
+        * @return {Matrix3}
+        */
         static scale(sx, sy){
             return new Matrix3(sx, 0, 0,
                                0, sy, 0,
                                0, 0, 1);
         }
 
+        /**
+        * devuelve la matriz de traslación 2D.
+        * @param {int} tx
+        * @param {int} ty
+        * @return {Matrix3}
+        */
         static translate(tx, ty){
             return new Matrix3(1, 0, 0,
                                0, 1, 0,
