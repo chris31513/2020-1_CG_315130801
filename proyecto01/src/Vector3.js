@@ -173,4 +173,3 @@ var CG = (function(CG) {
     CG.Vector3 = Vector3;
     return CG;
 }(CG || {}));
-

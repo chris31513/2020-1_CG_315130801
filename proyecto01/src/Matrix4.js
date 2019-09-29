@@ -145,7 +145,7 @@ var CG = (function(CG) {
          * @param {Matrix4} m2 
          */
         static multiply(m1, m2) {
-            m4 = Matrix4((m1.a00 * m2.a00 + m1.a01 * m2.a10 + m1.a02 * m2.a20 + m1.a03 * m2.a30),
+            var m4 = new Matrix4((m1.a00 * m2.a00 + m1.a01 * m2.a10 + m1.a02 * m2.a20 + m1.a03 * m2.a30),
                          (m1.a00 * m2.a01 + m1.a01 * m2.a11 + m1.a02 * m2.a21 + m1.a03 * m2.a31),
                          (m1.a00 * m2.a02 + m1.a01 * m2.a12 + m1.a02 * m2.a22 + m1.a03 * m2.a32),
                          (m1.a00 * m2.a03 + m1.a01 * m2.a13 + m1.a02 * m2.a23 + m1.a03 * m2.a33),
@@ -240,7 +240,7 @@ var CG = (function(CG) {
         * @return {Matrix4}
         */
         static frustum(left, right, bottom, top, near, far){
-            return new Matrix4((2 * near) / right - left, 0, (right + left) / (right - left), 0,
+            return new Matrix4((2 * near) / (right - left), 0, (right + left) / (right - left), 0,
                                0, (2 * near) / (top - bottom), (top + bottom) / (top - bottom), 0,
                                0, 0, -(far + near) / (far - near), (-2 * far * near) / (far - near),
                                0, 0, -1, 0);
@@ -255,14 +255,13 @@ var CG = (function(CG) {
         * @return {Matrix4}
         */
         static lookAt(eye, center, up){
-            Vector3 f = CG.Vector3.sub(center, eye).normalize();
-            Vector3 u = up.normalize();
-            Vector3 s = CG.Vector3.cross(f, u).normalize();
-            u = CG.Vector3.cross(s, f);
-            return new Matrix4(s.x, u.x, -1*f.x, 0,
-                               s.y, u.y, -1*f.y, 0,
-                               s.z, u.z, -1*f.z, 0,
-                               -1*CG.Vector3.dot(s, eye), -1*CG.Vector3.dot(u, eye), CG.Vector3.dot(f, eye), 0);
+            var w = CG.Vector3.sub(eye, center).normalize();
+            var u = CG.Vector3.cross(up, w).normalize();
+            var v = CG.Vector3.cross(w, u);
+            return new Matrix4(u.x, v.x, w.x, 0,
+                               u.y, v.y, w.y, 0,
+                               u.z, v.z, w.z, 0,
+                               -(u.x * eye.x + u.y * eye.y + u.z * eye.z), -(v.x * eye.x + v.y * eye.y + v.z * eye.z), -(w.x * eye.x + w.y * eye.y + w.z * eye.z), 1);
         }
 
         /**
@@ -275,6 +274,13 @@ var CG = (function(CG) {
                                (v.x * this.a01) + (v.y * this.a11) + (v.z * this.a21) + (v.w * this.a31),
                                (v.x * this.a02) + (v.y * this.a12) + (v.z * this.a22) + (v.w * this.a32),
                                (v.x * this.a03) + (v.y * this.a13) + (v.z * this.a23) + (v.w * this.a33));
+        }
+
+        multiplyVector3(v){
+            var w = -(this.a03*v.x + this.a13*v.y + this.a23*v.z + this.a33*1);
+            return new CG.Vector3(((v.x * this.a00) + (v.y * this.a10) + (v.z * this.a20) + (1 * this.a30))/w,
+                               ((v.x * this.a01) + (v.y * this.a11) + (v.z * this.a21) + (1 * this.a31))/w,
+                               ((v.x * this.a02) + (v.y * this.a12) + (v.z * this.a22) + (1 * this.a32))/w);
         }
 
         /**
@@ -327,7 +333,7 @@ var CG = (function(CG) {
         * @return {Matrix4}
         */
         static rotateY(rad){
-            return new Matrix4(Math.cos(rad), 0, Math.sin(rad), 0
+            return new Matrix4(Math.cos(rad), 0, Math.sin(rad), 0,
                                0, 1, 0, 0,
                                -1*Math.sin(rad), 0, Math.cos(rad), 0,
                                0, 0, 0, 1);
