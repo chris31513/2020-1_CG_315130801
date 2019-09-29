@@ -254,14 +254,12 @@ var CG = (function(CG) {
         * @param {Vector3} up
         * @return {Matrix4}
         */
-        static lookAt(eye, center, up){
-            var w = CG.Vector3.sub(eye, center).normalize();
-            var u = CG.Vector3.cross(up, w).normalize();
-            var v = CG.Vector3.cross(w, u);
-            return new Matrix4(u.x, v.x, w.x, 0,
-                               u.y, v.y, w.y, 0,
-                               u.z, v.z, w.z, 0,
-                               -(u.x * eye.x + u.y * eye.y + u.z * eye.z), -(v.x * eye.x + v.y * eye.y + v.z * eye.z), -(w.x * eye.x + w.y * eye.y + w.z * eye.z), 1);
+        static lookAt(cameraPos, coi, up){
+            let w = CG.Vector3.sub(cameraPos, coi).normalize();
+            let u = CG.Vector3.cross(up, w).normalize();
+            let v = CG.Vector3.cross(w, u).normalize();
+
+            return new Matrix4(u.x, v.x, w.x, 0, u.y, v.y, w.y, 0, u.z, v.z, w.z, 0, -(u.x * cameraPos.x + u.y * cameraPos.y + u.z * cameraPos.z), -(v.x * cameraPos.x + v.y * cameraPos.y + v.z * cameraPos.z), -(w.x * cameraPos.x + w.y * cameraPos.y + w.z * cameraPos.z), 1);
         }
 
         /**
@@ -309,10 +307,8 @@ var CG = (function(CG) {
         * @return {Matrix4}
         */
         static perspective(fovy, aspect, near, far){
-            return new Matrix4(1 / (aspect * (Math.tan(fovy/2))), 0, 0, 0,
-                               0, 1 / (Math.tan(fovy/2)), 0, 0,
-                               0, 0, -1*((far + near) / (far - near)), -1*((2 * (far * near)) / (far - near)),
-                               0, 0, -1, 0);
+            var ftan = 1 / Math.tan(fovy/2);
+            return new Matrix4(ftan/aspect, 0, 0, 0, 0, ftan, 0, 0, 0, 0, (near + far)/(near - far), -1, 0, 0, (2*far*near)/(near - far), 0);
         }
 
         /**
