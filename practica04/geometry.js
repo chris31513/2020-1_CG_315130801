@@ -25,6 +25,7 @@ var index = [1,3,0,
 			 0,7,4,
 			 6,2,1,
 			 5,6,1];
+             
 function getNormals(){
 	var i;
 	
@@ -36,15 +37,10 @@ function getNormals(){
 	}
 }
 
-function getIndex(){
-    return index;
-}
-
 function initGeometry(name,json){
 	getNormals();
     vertexBuffer = gl.createBuffer();
-    if(!vertexBuffer)
-    {
+    if(!vertexBuffer){
    	 alert("No se pudo crear el buffer");
 	 console.log("Fail creating a vertex buffer");
 	 return -1;
@@ -82,10 +78,7 @@ function initGeometry(name,json){
 
 }
 
-
-
-function activateBuffers()
-{
+function activateBuffers(){
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vertexPositionAttribute);
@@ -96,4 +89,16 @@ function activateBuffers()
         
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
+}
+
+function getVertices(){
+    return vertex;
+}
+
+function getIndex(){
+    return index;
+}
+
+function getNormal() {
+    return normals;
 }

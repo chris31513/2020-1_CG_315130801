@@ -1,9 +1,9 @@
 var shaderProgram; // id_programa
 var vertexPositionAttribute; // vertices
 var normalPositionAttribute; // normales
+var colorAtt;
 
-function initShaders()
-{
+function initShaders(){
 	var fragmentShader = getShader("shader-fs");
 	var vertexShader = getShader("shader-vs");
 	
@@ -24,11 +24,10 @@ function initShaders()
 	gl.enableVertexAttribArray(vertexPositionAttribute);
 	normalPositionAttribute = gl.getAttribLocation(shaderProgram,"aNormalPosition");
 	gl.enableVertexAttribArray(normalPositionAttribute);
-		
+	colorAtt = gl.getUniformLocation(shaderProgram, "baseColor");
 }
 
-function getShader(id)
-{	
+function getShader(id){	
 	var shaderScript = document.getElementById(id);
 	
 	if(!shaderScript){
