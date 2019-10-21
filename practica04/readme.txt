@@ -1,0 +1,1 @@
+Todos los archivos gl* y geometry* están basados en los que aparecen en archivo CuboShading que subió el profesor. Solamente se actualizaron algunas cosas y se cambió la geometría de las figuras.

@@ -1,5 +1,6 @@
 var CG = (function(CG) {
     class Dodecaedro{
+        //Constructor de la figura, inicializa la misma con su color. gl es el contexto de Webgl en el canvas.
         constructor(gl, color, width, height, lenght, initial_transform ){
             this.gl = gl;
             var bufferC = gl.createBuffer();
@@ -29,26 +30,32 @@ var CG = (function(CG) {
 
         }
 
+        //Devuelve el buffer de color de la figura.
         getColorBuffer(){
             return this.colorBuffer;
         }
 
+        //Devuelve el buffer de los vertices.
         getPositionBuffer(){
             return this.verticesBuffer;
         }
 
+        //Devuelve el buffer de las caras.
         getIndexBuffer(){
             return this.indicesBuffer;
         }
 
+        //Devuelve el buffer de las normales.
         getNormalBuffer(){
             return this.normals;
         }
 
+        //Devuelve la transformación inicial.
         getModelTransform(){
             return this.initial_transform;
         }
 
+        //Dibuja la figura en el contexto gl.
         draw(gl){
             initWebGL();
             gl.uniform3f(colorAtt, this.colorVector[0], this.colorVector[1], this.colorVector[2]);
