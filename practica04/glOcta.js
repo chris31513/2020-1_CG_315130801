@@ -124,7 +124,7 @@ function draw()
     
     
     setMatrixUniforms(); 
-    gl.drawElements(gl.TRIANGLES, 12, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, 24, gl.UNSIGNED_SHORT, 0);
     
     idle();
 };
