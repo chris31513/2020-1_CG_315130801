@@ -2,8 +2,8 @@ var vertexBuffer;
 var normalBuffer;
 var indexBuffer;
 
-var vertex = [ 0.5,  0.5, 1.5,
-     		   0.5,  0.5,-1.5,
+var vertex = [ 0.5,  0.5, 0.5,
+     		   0.5,  0.5,-0.5,
     		  -0.5,  0.5,-0.5,
      		  -0.5,  0.5, 0.5,
      		   0.5, -0.5, 0.5,
@@ -25,7 +25,7 @@ var index = [1,3,0,
 			 0,7,4,
 			 6,2,1,
 			 5,6,1];
-             
+
 function getNormals(){
 	var i;
 	

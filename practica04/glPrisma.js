@@ -78,7 +78,7 @@ function initWebGL(){
 
 function idle(){
 	if(ygrados < 360.0) {
-		ygrados = ygrados + 0.9999;
+		ygrados = ygrados + 0.09999;
 	}else{
 		ygrados = 0.5;
 	}
