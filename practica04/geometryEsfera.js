@@ -5,11 +5,11 @@ var vertex = [];
 vertex.push(0);
 vertex.push(1);
 vertex.push(0);
-for (let i=1; i<32; i++) {
-    phi = (i*Math.PI)/32;
+for (let i=1; i<64; i++) {
+    phi = (i*Math.PI)/64;
 
-    for (let j=0; j<32; j++) {
-      theta = (j*2*Math.PI)/32;
+    for (let j=0; j<64; j++) {
+      theta = (j*2*Math.PI)/64;
 
       x = 1 * Math.sin(phi) * Math.cos(theta);
       y = 1 * Math.cos(phi);
@@ -27,23 +27,23 @@ vertex.push(0);
 var normals = [];
 
 var index = [];
-for (let i=0; i<32; i++) {
+for (let i=0; i<64; i++) {
     index.push(0);
-    index.push(((i+1)%32)+1);
-    index.push((i%32)+1);
+    index.push(((i+1)%64)+1);
+    index.push((i%64)+1);
 }
-for (let i=1; i<32-1; i++) {
-    for (let j=0; j<32; j++) {
-        index.push(j+1 +(i-1)*32);
-        index.push((j+1)%32 +1 +(i-1)*32);
-        index.push((j+1)%32 +1 +i*32);
-        index.push(j+1 +i*32);
+for (let i=1; i<64-1; i++) {
+    for (let j=0; j<64; j++) {
+        index.push(j+1 +(i-1)*64);
+        index.push((j+1)%64 +1 +(i-1)*64);
+        index.push((j+1)%64 +1 +i*64);
+        index.push(j+1 +i*64);
     }
 }
-for (i=0; i<32; i++) {
+for (i=0; i<64; i++) {
     index.push(vertex.length-1);
-    index.push(vertex.length-1-32 +i);
-    index.push(vertex.length-1-32 +((i+1)%32));
+    index.push(vertex.length-1-64 +i);
+    index.push(vertex.length-1-64 +((i+1)%64));
   }
 
 function getNormals(){
