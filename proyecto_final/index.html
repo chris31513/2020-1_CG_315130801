@@ -2,7 +2,9 @@
 <html>
 <head>
     <title>Proyecto</title>
-    <script src="https://threejs.org/build/three.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/threejs/r84/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
     <style>
         html, body { margin: 0; padding:0; overflow: hidden; }
     </style>
@@ -48,7 +50,35 @@
         t.rotation.x=Math.PI/180*-10;
         scene.add( t );
 
+        document.body.appendChild(renderer.domElement);
+        document.body.addEventListener( 'keydown', onKeyDown, false );
 
+        animate();
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+            render();
+        }
+
+        function render() {
+            mesh.rotation.x += 0.01;
+            mesh.rotation.y += 0.02;
+
+            renderer.render(scene, camera);
+        }
+
+        function onKeyDown(){
+            switch( event.keyCode ) {
+                case 83: // up
+                    camera.position.z += 1;
+                    break;
+                case 87: // down
+                    camera.position.z -= 1;
+                    break;
+            }
+   
+        }
     </script>
 </body>
 </html>
