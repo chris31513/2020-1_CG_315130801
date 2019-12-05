@@ -58,26 +58,56 @@
         function animate() {
 
             requestAnimationFrame(animate);
-            render();
+            render1();
         }
 
-        function render() {
+        function render1() {
             mesh.rotation.x += 0.01;
             mesh.rotation.y += 0.02;
 
             renderer.render(scene, camera);
         }
 
+        
+
+        var mouse = {x:0,y:0};
+        var cameraMoves = {x:0,y:0,z:-0.1,move:false,speed:0.02};
+        render();
+
+        function mouseMove(e){
+            if(event.button == 0){
+                camera.position.y -= event.movementY * cameraMoves.speed/10
+                camera.position.x -= event.movementX * cameraMoves.speed/10
+                camera.position.z -= ((event.movementX + event.movementY)) * cameraMoves.speed/10  
+            } else if(event.button == 2){
+                camera.quaternion.y -= event.movementY * cameraMoves.speed/10
+                camera.quaternion.x -= event.movementX * cameraMoves.speed/10
+            }
+        }
+
         function onKeyDown(){
-            switch( event.keyCode ) {
-                case 83: // up
+            switch(event.keyCode) {
+                case 83:
                     camera.position.z += 1;
                     break;
-                case 87: // down
+                case 87:
                     camera.position.z -= 1;
+                    break;
+                case 65: 
+                    camera.position.x -= 1;
+                    break;
+                case 68:
+                    camera.position.x += 1;
                     break;
             }
    
+        }
+
+        window.addEventListener('mousemove', mouseMove);
+
+        function render() {
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
         }
     </script>
 </body>
